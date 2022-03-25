@@ -1,4 +1,4 @@
-# KotlinPractice_FastCampus_Chapter02 - 전자 액자
+# KotlinPractice_FastCampus_Chapter05 - 전자 액자
 ## 해당 챕터를 통해 배운 것
   * Layout을 그리는 법
     * 가로 화면으로 그리기
