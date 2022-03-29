@@ -49,10 +49,10 @@ class MainActivity : AppCompatActivity() {
                 ContextCompat.checkSelfPermission(
                     this,
                     android.Manifest.permission.READ_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED -> {
+                ) == PackageManager.PERMISSION_GRANTED -> { // 권한이 허용 되어있을 경우
                     navigatePhotos()
                 }
-                shouldShowRequestPermissionRationale(android.Manifest.permission.READ_EXTERNAL_STORAGE) -> {
+                shouldShowRequestPermissionRationale(android.Manifest.permission.READ_EXTERNAL_STORAGE) -> { // 권한 알림을 보여줘야 하는 경우
                     showPermissionContextPopup()
                 }
                 else -> {
@@ -73,12 +73,15 @@ class MainActivity : AppCompatActivity() {
             imageUriList.forEachIndexed { index, uri ->
                 intent.putExtra("photo$index", uri.toString())
             }
+            /*
+            각각의 uri 데이터를 String 형으로 바꿔서 intent
+             */
             intent.putExtra("photoListSize", imageUriList.size)
             startActivity(intent)
         }
     }
 
-    override fun onRequestPermissionsResult(
+    override fun onRequestPermissionsResult( // 권한 응답 메서드
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
@@ -99,9 +102,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigatePhotos() {
+    private fun navigatePhotos() { // SAF (Storage Access Framework)
         val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "image/*"
+        intent.type = "image/*" // 모든 이미지 파일 형식
         startActivityForResult(intent, 2000)
     }
 
@@ -115,14 +118,14 @@ class MainActivity : AppCompatActivity() {
             2000 -> {
                 val selectedImageUri: Uri? = data?.data
 
-                if (selectedImageUri != null) {
+                if (selectedImageUri != null) { // null 체크
 
-                    if(imageUriList.size == 6) {
+                    if(imageUriList.size == 6) { // 사진 개수 예외 처리
                         Toast.makeText(this, "이미 사진이 꽉 찼습니다.", Toast.LENGTH_SHORT).show()
                         return
                     }
-                    imageUriList.add(selectedImageUri)
-                    imageViewList[imageUriList.size - 1].setImageURI(selectedImageUri)
+                    imageUriList.add(selectedImageUri) // imageUriList에 selectedImageUri 추가
+                    imageViewList[imageUriList.size - 1].setImageURI(selectedImageUri) // 이미지 표시
                 } else {
                     Toast.makeText(this, "사진을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
                 }
@@ -135,7 +138,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun showPermissionContextPopup() {
+    private fun showPermissionContextPopup() { // 권한 요청 팝업
         AlertDialog.Builder(this)
             .setTitle("권한이 필요합니다.")
             .setMessage("전자액자 앱에서 사진을 불러오기 위한 권한이 필요합니다.")
